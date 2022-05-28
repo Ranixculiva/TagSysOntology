@@ -1,6 +1,6 @@
 from owlready2 import *
-onto_path.append(".\TagSys.py")
-TagSys_onto = get_ontology("http://www.semanticweb.org/john2/ontologies/2022/4/TagSys")
+onto_path.append(".\TagSys.owl")
+TagSys_onto = get_ontology("https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl")
 
 
 with TagSys_onto:
