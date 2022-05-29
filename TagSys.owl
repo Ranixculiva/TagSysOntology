@@ -82,6 +82,23 @@
     
 
 
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasSlot -->
+
+    <owl:ObjectProperty rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasSlot">
+        <rdfs:subPropertyOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasProperty"/>
+        <owl:inverseOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#isSlotOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasSysTag -->
+
+    <owl:ObjectProperty rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasSysTag">
+        <rdfs:subPropertyOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasProperty"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasTag -->
 
     <owl:ObjectProperty rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasTag">
@@ -113,10 +130,30 @@
     
 
 
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#isSlotOf -->
+
+    <owl:ObjectProperty rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#isSlotOf">
+        <rdfs:subPropertyOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#isProperty"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#isTagOf -->
 
     <owl:ObjectProperty rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#isTagOf">
         <rdfs:subPropertyOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#isProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#match -->
+
+    <owl:ObjectProperty rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#match">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdfs:domain rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
+        <rdfs:range rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
     </owl:ObjectProperty>
     
 
@@ -154,14 +191,6 @@
     <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Block">
         <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
         <rdfs:subClassOf>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasCandidate"/>
                 <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
@@ -181,12 +210,6 @@
         </rdfs:subClassOf>
         <owl:disjointWith rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortBlock"/>
     </owl:Class>
-    
-
-
-    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#BlockDiagram -->
-
-    <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#BlockDiagram"/>
     
 
 
@@ -238,23 +261,9 @@
 
     <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock">
         <rdfs:subClassOf>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasCandidate"/>
                 <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasPort"/>
-                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -299,33 +308,6 @@
     <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkBlock">
         <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
         <rdfs:subClassOf>
-            <owl:Class>
-                <owl:unionOf rdf:parseType="Collection">
-                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-                </owl:unionOf>
-            </owl:Class>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectTo"/>
-                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortBlock"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectTo"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:subClassOf>
             <owl:Restriction>
                 <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasCandidate"/>
                 <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
@@ -333,8 +315,8 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasPort"/>
-                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
+                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasSlot"/>
+                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotBlock"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -347,9 +329,39 @@
     
 
 
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkComponent -->
+
+    <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkComponent">
+        <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasSlot"/>
+                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponent"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkComponentLibrary -->
+
+    <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkComponentLibrary">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkComponent"/>
+                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
     <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#NotebookTag -->
 
     <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#NotebookTag">
+        <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ComponentLibrary"/>
         <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
     </owl:Class>
     
@@ -404,8 +416,8 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectTo"/>
-                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkBlock"/>
+                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectFrom"/>
+                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotBlock"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
@@ -520,9 +532,76 @@
     
 
 
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponentLibrary -->
+
+    <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponentLibrary">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponent"/>
+                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotBlock -->
+
+    <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotBlock">
+        <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectTo"/>
+                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortBlock"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#isSlotOf"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkBlock"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+    </owl:Class>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponent -->
+
+    <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponent">
+        <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
+    </owl:Class>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponentLibrary -->
+
+    <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponentLibrary">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponent"/>
+                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
+                </owl:intersectionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+    </owl:Class>
+    
+
+
     <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag -->
 
     <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#NotebookTag"/>
+                    <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBTag"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
         <rdfs:comment>A collection of all components and portComponents</rdfs:comment>
     </owl:Class>
     
@@ -532,6 +611,13 @@
 
     <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.FTag">
         <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBATag"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#match"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.MTag"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
     </owl:Class>
     
 
@@ -540,6 +626,13 @@
 
     <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.MTag">
         <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBATag"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#match"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.FTag"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
     </owl:Class>
     
 
@@ -556,7 +649,16 @@
 
     <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.FTag">
         <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBCTag"/>
-        <owl:disjointWith rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.MTag"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#match"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.MTag"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <owl:hasKey rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#match"/>
+        </owl:hasKey>
     </owl:Class>
     
 
@@ -565,6 +667,13 @@
 
     <owl:Class rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.MTag">
         <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBCTag"/>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#match"/>
+                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
+                <owl:onClass rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.FTag"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
     </owl:Class>
     
 
@@ -603,6 +712,7 @@
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#NotebookTag"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.FTag"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.FTag"/>
         <rdf:type>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -623,7 +733,6 @@
                 <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
             </owl:Restriction>
         </rdf:type>
-        <owl:sameAs rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3"/>
         <TagSys:hasPort rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ASUS-GW233.port.USBA_1"/>
         <TagSys:hasPort rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ASUS-GW233.port.USBA_2"/>
         <TagSys:hasPort rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ASUS-GW233.port.USBC_1"/>
@@ -640,6 +749,7 @@
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.FTag"/>
         <rdf:type>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -687,6 +797,7 @@
                 </owl:onClass>
             </owl:Restriction>
         </rdf:type>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Ftag"/>
         <TagSys:isPortOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ASUS-GW233"/>
         <TagSys:isProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ASUS-GW233"/>
     </owl:NamedIndividual>
@@ -699,6 +810,7 @@
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.FTag"/>
         <rdf:type>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -746,6 +858,7 @@
                 </owl:onClass>
             </owl:Restriction>
         </rdf:type>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Ftag"/>
         <TagSys:isPortOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ASUS-GW233"/>
         <TagSys:isProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ASUS-GW233"/>
     </owl:NamedIndividual>
@@ -758,6 +871,7 @@
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.FTag"/>
         <rdf:type>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -805,18 +919,9 @@
                 </owl:onClass>
             </owl:Restriction>
         </rdf:type>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Ftag"/>
         <TagSys:isPortOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ASUS-GW233"/>
         <TagSys:isProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#ASUS-GW233"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Block1 -->
-
-    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Block1">
-        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Block"/>
-        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#BlockDiagram"/>
-        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Notebook"/>
     </owl:NamedIndividual>
     
 
@@ -826,6 +931,7 @@
     <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3">
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Component"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#NotebookTag"/>
         <rdf:type>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
@@ -854,7 +960,6 @@
                 <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
             </owl:Restriction>
         </rdf:type>
-        <owl:sameAs rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Notebook"/>
         <TagSys:hasPort rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3.port.USBC_1"/>
         <TagSys:hasPort rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3.port.USBC_2"/>
         <TagSys:hasPort rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3.port.USBC_3"/>
@@ -871,6 +976,7 @@
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.FTag"/>
         <rdf:type>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -918,6 +1024,7 @@
                 </owl:onClass>
             </owl:Restriction>
         </rdf:type>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Ftag"/>
         <TagSys:isPortOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3"/>
         <TagSys:isProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3"/>
     </owl:NamedIndividual>
@@ -930,6 +1037,7 @@
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.FTag"/>
         <rdf:type>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -977,6 +1085,7 @@
                 </owl:onClass>
             </owl:Restriction>
         </rdf:type>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Ftag"/>
         <TagSys:isPortOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3"/>
         <TagSys:isProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3"/>
     </owl:NamedIndividual>
@@ -989,6 +1098,7 @@
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
         <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.FTag"/>
         <rdf:type>
             <owl:Class>
                 <owl:unionOf rdf:parseType="Collection">
@@ -1036,16 +1146,109 @@
                 </owl:onClass>
             </owl:Restriction>
         </rdf:type>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Ftag"/>
         <TagSys:isPortOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3"/>
         <TagSys:isProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#MacBookPro18_3"/>
     </owl:NamedIndividual>
     
 
 
-    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Notebook -->
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Ftag -->
 
-    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Notebook">
-        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#NotebookTag"/>
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Ftag">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.FTag"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBA.M -->
+
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBA.M">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.MTag"/>
+        <TagSys:hasSlot rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBA.M.slot.USBA.M1"/>
+        <TagSys:hasSlot rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBA.M.slot.USBA.M2"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBA.M.slot.USBA.M1 -->
+
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBA.M.slot.USBA.M1">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.MTag"/>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Mtag"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBA.M.slot.USBA.M2 -->
+
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBA.M.slot.USBA.M2">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponentLibrary"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.MTag"/>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Mtag"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBC.M -->
+
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBC.M">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkComponent"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Tag"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.MTag"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.MTag"/>
+        <TagSys:hasSlot rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBC.M.slot.USBA.M"/>
+        <TagSys:hasSlot rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBC.M.slot.USBC.M"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBC.M.slot.USBA.M -->
+
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBC.M.slot.USBA.M">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponentLibrary"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.MTag"/>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Mtag"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBC.M.slot.USBC.M -->
+
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.M_USBC.M.slot.USBC.M">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponentLibrary"/>
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.MTag"/>
+        <TagSys:hasTag rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Mtag"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Mtag -->
+
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Mtag">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.MTag"/>
+        <TagSys:match rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBA.Ftag"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Ftag -->
+
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Ftag">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.FTag"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Mtag -->
+
+    <owl:NamedIndividual rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Mtag">
+        <rdf:type rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.MTag"/>
+        <TagSys:match rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#USBC.Ftag"/>
     </owl:NamedIndividual>
     
 
@@ -1058,117 +1261,6 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    <owl:Class>
-        <owl:intersectionOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
-        </owl:intersectionOf>
-        <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-    </owl:Class>
-    <owl:Class>
-        <owl:intersectionOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
-        </owl:intersectionOf>
-        <rdfs:subClassOf rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
-    </owl:Class>
-    <owl:Class>
-        <owl:intersectionOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
-        </owl:intersectionOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectTo"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    <owl:Class>
-        <owl:intersectionOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
-        </owl:intersectionOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasCandidate"/>
-                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    <owl:Class>
-        <owl:intersectionOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
-        </owl:intersectionOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasPort"/>
-                <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    <owl:Class>
-        <owl:intersectionOf rdf:parseType="Collection">
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Port"/>
-        </owl:intersectionOf>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#isPortOf"/>
-                <owl:qualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:qualifiedCardinality>
-                <owl:onClass>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:onClass>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Class>
-    <owl:Restriction>
-        <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectTo"/>
-        <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkBlock"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectTo"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Restriction>
-    <owl:Restriction>
-        <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectTo"/>
-        <owl:allValuesFrom rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortBlock"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#connectTo"/>
-                <owl:allValuesFrom>
-                    <owl:Class>
-                        <owl:unionOf rdf:parseType="Collection">
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenBlock"/>
-                            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#GenComponent"/>
-                        </owl:unionOf>
-                    </owl:Class>
-                </owl:allValuesFrom>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-    </owl:Restriction>
     <rdf:Description>
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
         <owl:members rdf:parseType="Collection">
@@ -1177,102 +1269,14 @@
             <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortBlock"/>
         </owl:members>
     </rdf:Description>
-    
-
-
-    <!-- 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Rules
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
-     -->
-
-    <rdf:Description rdf:about="http://www.semanticweb.org/john2/ontologies/2022/4/TagSys#b">
-        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
-    </rdf:Description>
-    <rdf:Description rdf:about="http://www.semanticweb.org/john2/ontologies/2022/4/TagSys#t">
-        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Variable"/>
-    </rdf:Description>
     <rdf:Description>
-        <swrla:isRuleEnabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrla:isRuleEnabled>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:comment>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">S1</rdfs:label>
-        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Imp"/>
-        <swrl:body>
-            <rdf:Description>
-                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
-                        <swrl:classPredicate rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Block"/>
-                        <swrl:argument1 rdf:resource="http://www.semanticweb.org/john2/ontologies/2022/4/TagSys#b"/>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                        <rdf:first>
-                            <rdf:Description>
-                                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                                <swrl:propertyPredicate rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasTag"/>
-                                <swrl:argument1 rdf:resource="http://www.semanticweb.org/john2/ontologies/2022/4/TagSys#b"/>
-                                <swrl:argument2 rdf:resource="http://www.semanticweb.org/john2/ontologies/2022/4/TagSys#t"/>
-                            </rdf:Description>
-                        </rdf:first>
-                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-                    </rdf:Description>
-                </rdf:rest>
-            </rdf:Description>
-        </swrl:body>
-        <swrl:head>
-            <rdf:Description>
-                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#IndividualPropertyAtom"/>
-                        <swrl:propertyPredicate rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#hasCandidate"/>
-                        <swrl:argument1 rdf:resource="http://www.semanticweb.org/john2/ontologies/2022/4/TagSys#b"/>
-                        <swrl:argument2 rdf:resource="http://www.semanticweb.org/john2/ontologies/2022/4/TagSys#t"/>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-            </rdf:Description>
-        </swrl:head>
-    </rdf:Description>
-    <rdf:Description>
-        <swrla:isRuleEnabled rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</swrla:isRuleEnabled>
-        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></rdfs:comment>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">TagFilter</rdfs:label>
-        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#Imp"/>
-        <swrl:body>
-            <rdf:Description>
-                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#ClassAtom"/>
-                        <swrl:classPredicate rdf:resource="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Component"/>
-                        <swrl:argument1 rdf:resource="http://www.semanticweb.org/john2/ontologies/2022/4/TagSys#b"/>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-            </rdf:Description>
-        </swrl:body>
-        <swrl:head>
-            <rdf:Description>
-                <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#AtomList"/>
-                <rdf:first>
-                    <rdf:Description>
-                        <rdf:type rdf:resource="http://www.w3.org/2003/11/swrl#BuiltinAtom"/>
-                        <swrl:builtin rdf:resource="http://sqwrl.stanford.edu/ontologies/built-ins/3.4/sqwrl.owl#select"/>
-                        <swrl:arguments rdf:parseType="Collection">
-                            <rdf:Description rdf:about="http://www.semanticweb.org/john2/ontologies/2022/4/TagSys#b"/>
-                        </swrl:arguments>
-                    </rdf:Description>
-                </rdf:first>
-                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-            </rdf:Description>
-        </swrl:head>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#Component"/>
+            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#LinkComponent"/>
+            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#PortComponent"/>
+            <rdf:Description rdf:about="https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl#SlotComponent"/>
+        </owl:members>
     </rdf:Description>
 </rdf:RDF>
 
