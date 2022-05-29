@@ -1,6 +1,6 @@
 # TagSysOntology
-Run UI.py
-enjoy~
+Run UI.py and enjoy~
+
 Example:
   1. click "Block" to create a block
   2. drag it to a propriate posistion
