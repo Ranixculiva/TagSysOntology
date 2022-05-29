@@ -125,6 +125,8 @@ class RectangleGenBlock:
         #Tag_sys
         self.genBlock = None
 
+
+        self.isIn=False
         self.canvas = canvas
         self.tag = f'Component{id(self)}'
         self.w = w
@@ -174,11 +176,15 @@ class RectangleGenBlock:
             self.menu.position = (self.x1, self.y0)
 
     def object_enter_event(self, e):
+        self.isIn = True
         if not self.isLine:
             self.canvas.itemconfig(self.rectangle, outline='SkyBlue')
+        else:
+            self.canvas.itemconfig(self.rectangle, fill='SkyBlue')
+
 
     def object_leave_event(self, e):
-        
+        self.isIn = False
         color = 'black'
         width = 1
         if RectangleGenBlock.cur_selected == self:
@@ -186,16 +192,22 @@ class RectangleGenBlock:
             width = 3
         if not self.isLine:
             self.canvas.itemconfig(self.rectangle, outline=color,width=width)
+        else:
+            self.canvas.itemconfig(self.rectangle, fill=color,w=width)
 
     def mouse_left_click(self, e):
         r = self
         if not self.isLine:
             self.canvas.itemconfig(self.rectangle, outline='Blue')
+        else:
+            self.canvas.itemconfig(self.rectangle, fill='Blue')
         self.X_relative_to_cur_rect = e.x - (r.x0 + r.w/2)
         self.Y_relative_to_cur_rect = e.y - (r.y0 + r.h/2)
         if RectangleGenBlock.cur_selected:
             if not RectangleGenBlock.cur_selected.isLine:
                 self.canvas.itemconfig(RectangleGenBlock.cur_selected.rectangle, outline='Blue',width=1)
+            else:
+                self.canvas.itemconfig(RectangleGenBlock.cur_selected.rectangle, fill='Blue',w=1)
         if RectangleGenBlock.cur_selected != self:
             RectangleGenBlock.cur_selected = self
             self.gfg.update_tag_frame()
@@ -205,6 +217,8 @@ class RectangleGenBlock:
     def mouse_left_release(self, e):
         if not self.isLine:
             self.canvas.itemconfig(self.rectangle, outline='SkyBlue')
+        else:
+            self.canvas.itemconfig(self.rectangle, fill='SkyBlue')
         w = self.canvas.winfo_width()
         h = self.canvas.winfo_height()
         r = self
@@ -245,11 +259,11 @@ class RectangleGenBlock:
             if b.isLine: 
                 b.update()
 
-    def isIn(self, px, py):
-        return self.x0 <= px and\
-            self.y0 <= py and\
-            self.x1 >= px and\
-            self.y1 >= py
+    #def isIn(self, px, py):
+    #    return self.x0 <= px and\
+    #        self.y0 <= py and\
+    #        self.x1 >= px and\
+    #        self.y1 >= py
 class RectangleBlock(RectangleGenBlock):
     def __init__(self, canvas, gfg, color='black', text='NoText', textColor='red',x0=0,y0=0,w=50,h=50):
         
@@ -499,12 +513,12 @@ class GFG:
         if not RectangleGenBlock.cur_selected:return 
         
 
-        if not selected_rectangle.isIn(e.x,e.y):
+        if not selected_rectangle.isIn:#(e.x,e.y):
             RectangleGenBlock.cur_selected = None
             if not selected_rectangle.isLine:
                 self.canvas.itemconfig(selected_rectangle.rectangle, outline='black',width=1)
             else:
-                self.canvas.itemconfig(selected_rectangle.rectangle, fill='black',w=3)
+                self.canvas.itemconfig(selected_rectangle.rectangle, fill='black',w=1)
             self.clear_tag_frame()
 
     def clear_tag_frame(self):
@@ -545,7 +559,7 @@ class GFG:
     def link_select_component(self, e):
         bind_id = self.link_select_component_bind_id
         for r in list(self.rectangleBlocks):
-            if r.isIn(e.x, e.y):
+            if r.isIn:#(e.x, e.y):
                 self.selection.append(r)
                 break
         else:
@@ -572,7 +586,7 @@ class GFG:
             h=(s2.y0+s2.y1)/2 - (s1.y0+s1.y1)/2
             y0=(s1.y0+s1.y1)/2
             x0=s1.x1+1
-            l1 = RectangleLinkBlock(self.canvas, self,color='black',text='link',textColor = 'red',x0= x0,y0 = y0 ,w=w ,h=h )
+            l1 = RectangleLinkBlock(self.canvas, self,color='black',text='link',textColor = 'blue',x0= x0,y0 = y0 ,w=w ,h=h )
             l1.rec_slot_blocks.append(s1)
             l1.rec_slot_blocks.append(s2)
             s1.attached_blocks.add(l1)
