@@ -1,20 +1,37 @@
 from owlready2 import *
+
 onto_path.append(".\TagSys.owl")
 #TagSys_onto = get_ontology("https://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl")
-TagSys_onto = get_ontology("TagSys.owl")
+#TagSys_onto = get_ontology("http://github.com/Ranixculiva/TagSysOntology/blob/main/TagSys.owl")
+import os
+dir = os.path.dirname(__file__)
+
+TagSys_onto = get_ontology("file://"+ dir +"//TagSys.owl")
 TagSys_onto.load()
 
 
-from collections import Iterable
+from collections.abc import Iterable
 with TagSys_onto:
-
+    class updated(TagSys_onto.GenBlock >> bool,FunctionalProperty):
+        pass
+    class deleted(TagSys_onto.GenBlock >> bool,FunctionalProperty):
+        pass
     class GenBlock(Thing):
         def __lshift__(self, tag):
+            self.updated = False
             if isinstance(tag, Iterable):
                 self.hasTag = list(set(self.hasTag).union(set(tag)))
             else:
                 s = set(self.hasTag)
                 s.add(tag)
+                self.hasTag = list(s)
+        def __rshift__(self, tag):
+            self.updated = False
+            if isinstance(tag, Iterable):
+                self.hasTag = list(set(self.hasTag).difference(set(tag)))
+            else:
+                s = set(self.hasTag)
+                s.remove(tag)
                 self.hasTag = list(s)
         def __iadd__(self, gen_block):
             self.connect(gen_block)
@@ -30,6 +47,7 @@ with TagSys_onto:
             for t in self.hasTag:
                 s = s.intersection(set(t.instances()))
             self.hasCandidate = list(s)
+            self.updated = True
             for port in self.hasPort:
                 port.update_candidates()
             
@@ -42,6 +60,7 @@ with TagSys_onto:
             for t in self.hasTag:
                 s = s.intersection(set(t.instances()))
             self.hasCandidate = list(s)
+            self.updated = True
             if self.connectFrom:
                 self += self.connectFrom[0]
                 self.connectFrom[0].update_candidates()
@@ -101,6 +120,9 @@ with TagSys_onto:
                 result = user_result
             self.hasCandidate = list(result)
             #update link 
+
+            self.updated = True
+
             if len(self.isSlotOf) == 1:
                 self.isSlotOf[0].update_candidates()
 
@@ -130,6 +152,12 @@ with TagSys_onto:
             for tag in self.hasTag:
                 setOfLinkComps = setOfLinkComps.intersection(set(tag.instances()))
             self.hasCandidate = list(setOfLinkComps)
+            
+            self.updated = True
+            
+            for slot in self.hasSlot:
+                if not slot.updated:
+                    slot.update_candidates()
 
 
 

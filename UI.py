@@ -137,7 +137,7 @@ class RectangleGenBlock:
         self.y1 = y1 = y0+self.h
         if isLine:
             self.rectangle = canvas.create_line(
-                self.x0, self.y0, self.x1, self.y1, fill=color, dash=True, tag=(self.tag))
+                self.x0, self.y0, self.x1, self.y1, fill=color, dash=True, tag=(self.tag),w=3)
         else:
             self.rectangle = canvas.create_rectangle(
                 self.x0, self.y0, self.x1, self.y1, fill=color, tag=(self.tag))
@@ -160,12 +160,19 @@ class RectangleGenBlock:
 
         self.X_relative_to_cur_rect = 0
         self.Y_relative_to_cur_rect = 0
+        #TODO: should change properties such as isSlotOf before deleting and also need to change genBlock
     def delete(self):
+        
+        for rec in self.attached_blocks:
+            rec.delete()
         self.canvas.delete(self.tag)
         for l in self.lineLinks:
             l.delete()
 
-
+        destroy_entity(self.genBlock)
+        print(TagSys_onto.GenBlock.instances())
+        #FIXME: slow down
+        
 
     def move_object(self, e):
         x = self.X_relative_to_cur_rect
@@ -193,7 +200,7 @@ class RectangleGenBlock:
         if not self.isLine:
             self.canvas.itemconfig(self.rectangle, outline=color,width=width)
         else:
-            self.canvas.itemconfig(self.rectangle, fill=color,w=width)
+            self.canvas.itemconfig(self.rectangle, fill=color,w=width+2)
 
     def mouse_left_click(self, e):
         r = self
@@ -204,10 +211,15 @@ class RectangleGenBlock:
         self.X_relative_to_cur_rect = e.x - (r.x0 + r.w/2)
         self.Y_relative_to_cur_rect = e.y - (r.y0 + r.h/2)
         if RectangleGenBlock.cur_selected:
+            if self.gfg.ConnectionMode:
+                self.gfg.selection.append(self)
+                self.gfg.selctionChangedTKvar.get()
+
             if not RectangleGenBlock.cur_selected.isLine:
                 self.canvas.itemconfig(RectangleGenBlock.cur_selected.rectangle, outline='Blue',width=1)
             else:
-                self.canvas.itemconfig(RectangleGenBlock.cur_selected.rectangle, fill='Blue',w=1)
+                self.canvas.itemconfig(RectangleGenBlock.cur_selected.rectangle, fill='Blue',w=3)
+
         if RectangleGenBlock.cur_selected != self:
             RectangleGenBlock.cur_selected = self
             self.gfg.update_tag_frame()
@@ -255,17 +267,25 @@ class RectangleGenBlock:
         self.canvas.coords(self.text, (self.x0+self.x1)/2, (self.y0+self.y1)/2)
         for l in self.lineLinks.keys():
             l.update()
-        for b in self.attached_blocks:
-            if b.isLine: 
-                b.update()
-
+        for rec_block in self.attached_blocks:
+            if rec_block.isLine: 
+                rec_block.update()
+    def update(self):
+        self.canvas.coords(self.rectangle,
+                           self.x0,
+                           self.y0,
+                           self.x1,
+                           self.y1)
+        self.canvas.coords(self.text, (self.x0+self.x1)/2, (self.y0+self.y1)/2)
+        for rec_block in self.attached_blocks:
+            rec_block.update()
     #def isIn(self, px, py):
     #    return self.x0 <= px and\
     #        self.y0 <= py and\
     #        self.x1 >= px and\
     #        self.y1 >= py
 class RectangleBlock(RectangleGenBlock):
-    def __init__(self, canvas, gfg, color='black', text='NoText', textColor='red',x0=0,y0=0,w=50,h=50):
+    def __init__(self, canvas, gfg, color='red', text='block', textColor='black',x0=0,y0=0,w=50,h=50):
         
         
         
@@ -274,19 +294,23 @@ class RectangleBlock(RectangleGenBlock):
         ## TagSys
         self.genBlock = TagSys_onto.Block()
         self.genBlock.update_candidates()
-        self.rec_port_blocks = []
+        self.hasPort = []
         
-    def delete(self):
+    def _delete(self):
+        for port in self.hasPort:
+            port.isPortOf = None
         destroy_entity(self.genBlock)
+        #super().delete()
         print(TagSys_onto.Block.instances())
-        super().delete()
     def __iadd__(self, rec_port_block):
+        self.hasPort.append(rec_port_block)
+        rec_port_block.isPortOf = self
         self.genBlock+=rec_port_block.genBlock
         self.attached_blocks.add(rec_port_block)
         rec_port_block.genBlock.update_candidates()
         return self
     def generate_rec_portBlock(self, isLeft=False):
-
+        
         w=14
         h=14
         y0=self.y0/2+self.y1/2-h/2
@@ -295,23 +319,43 @@ class RectangleBlock(RectangleGenBlock):
             offsetX = -self.w-w
         x0=self.x1+offsetX
 
-        rec_port_block = RectanglePortBlock(self.canvas, self.gfg,color='gray',text='p',textColor = 'blue',x0= x0,y0 = y0 ,w=w ,h=h )
-        self.rec_port_blocks.append(rec_port_block)
+        rec_port_block = RectanglePortBlock(self.canvas, self.gfg,x0= x0,y0 = y0 ,w=w ,h=h )
+        
+        #modify position
+
         self+=rec_port_block
+
+        num_port_blocks = len(self.attached_blocks)
+        if num_port_blocks > 1:
+            for i,port in enumerate(self.attached_blocks):
+                space_h = (self.h - port.h )/(num_port_blocks-1)
+                port.y0 = self.y0+i*space_h
+                port.y1 = port.y0 + port.h
+                port.update()
+        else:
+            rec_port_block.y0 = self.y0/2+self.y1/2-rec_port_block.h/2
+            rec_port_block.y1 = rec_port_block.y0 + rec_port_block.h
+            rec_port_block.update()
+
         return rec_port_block
 
 class RectanglePortBlock(RectangleGenBlock):
-    def __init__(self, canvas, gfg, color='black', text='NoText', textColor='red',x0=0,y0=0,w=50,h=50):
+    def __init__(self, canvas, gfg, color='gray', text='p', textColor='blue',x0=0,y0=0,w=14,h=14):
         
         super().__init__(canvas, gfg, color=color, text=text, textColor=textColor,x0=x0,y0=y0,w=w,h=h)
         ## TagSys
         self.genBlock = TagSys_onto.PortBlock()
-        self.rec_slot_blocks = []
-    def delete(self):
+        self.isPortOf = None
+        self.connectFromSlot = None
+    def _delete(self):
+        if self.connectFromSlot:
+            self.connectFromSlot.connectToPort = None
         destroy_entity(self.genBlock)
+        #super().delete()
         print(TagSys_onto.PortBlock.instances())
-        super().delete()
     def __iadd__(self,rec_slot_block):
+        self.connectFromSlot=rec_slot_block
+        rec_slot_block.connectToPort = self
         self.genBlock+=rec_slot_block.genBlock
         self.attached_blocks.add(rec_slot_block)
         rec_slot_block.genBlock.update_candidates()
@@ -324,56 +368,95 @@ class RectanglePortBlock(RectangleGenBlock):
         if isLeft:
             offsetX = -self.w-w-10
         x0=self.x1+5+offsetX
-        rec_slot_block = RectangleSlotBlock(self.canvas, self.gfg,color='orange',text='s',textColor = 'black',x0= x0,y0 = y0 ,w=w ,h=h )
-        self.rec_slot_blocks.append(rec_slot_block)
+        rec_slot_block = RectangleSlotBlock(self.canvas, self.gfg,x0= x0,y0 = y0 )
+
         self+=rec_slot_block
         return rec_slot_block
 
 class RectangleSlotBlock(RectangleGenBlock):
-    def __init__(self, canvas, gfg, color='black', text='NoText', textColor='red',x0=0,y0=0,w=50,h=50):
+    def __init__(self, canvas, gfg, color='orange',text='s',textColor = 'black',x0=0,y0=0,w=12,h=12):
         
         super().__init__(canvas, gfg, color=color, text=text, textColor=textColor,x0=x0,y0=y0,w=w,h=h)
         ## TagSys
         self.genBlock = TagSys_onto.SlotBlock()
-    def delete(self):
+        self.connectToPort = None
+        self.isSlotOf = None
+    def _delete(self):
+        if self.connectToPort:
+            self.connectToPort.connectFromSlot = None
+        if self.isSlotOf:
+            self.isSlotOf.remove(self)
         destroy_entity(self.genBlock)
+        #super().delete()
         print(TagSys_onto.SlotBlock.instances())
-        super().delete()
+    def generate_rec_linkBlock(self, s2):
+        s1 = self
+        l1 = RectangleLinkBlock(self.canvas, self.gfg)
+        l1+=s1
+        l1+=s2
+        l1.update()
+        l1.genBlock.update_candidates()
+        return l1
+    def update(self):
+        port = self.connectToPort
+        if port:
+            self.y0=port.y0/2+port.y1/2-self.h/2
+            offsetX = 5
+            if port.x0 > self.x0:
+                offsetX = -port.w-self.w-5
+            self.x0=port.x1+offsetX
+            self.x1 = self.x0+self.w
+            self.y1 = self.y0+self.h
+
+
+        super().update()
 
         #return super().moveTo(px, py, offsetX=offsetX, offsetY=offsetY)
 
 class RectangleLinkBlock(RectangleGenBlock):
-    def __init__(self, canvas, gfg, color='black', text='NoText', textColor='red',x0=0,y0=0,w=50,h=50):
+    def __init__(self, canvas, gfg, color='black',text='link',textColor = 'blue',x0=10,y0=10,w=100,h=10):
         
         super().__init__(canvas, gfg, color=color, text=text, textColor=textColor,x0=x0,y0=y0,w=w,h=h,isLine = True)
         ## TagSys
         self.genBlock = TagSys_onto.LinkBlock()
-        self.rec_slot_blocks = []
+        self.hasSlot = set()
 
-        self.rect1 = None
-        self.rect2 = None
-    def delete(self):
+    def _delete(self):
+        for slot in self.hasSlot:
+            slot.isSlotOf = None
         destroy_entity(self.genBlock)
+        #super().delete()
         print(TagSys_onto.SlotBlock.instances())
-        super().delete()
     def update(self):
-        r1, r2 = self.rect1,self.rect2
-        if r1.x0 > r2.x0:
-            r1,r2 = r2,r1
-        self.x1=r2.x0-1
-        self.y1=(r2.y0+r2.y1)/2
-        self.y0=(r1.y0+r1.y1)/2
-        self.x0=r1.x1+1
-        self.canvas.coords(self.rectangle, self.x0,self.y0,self.x1,self.y1)
-        self.canvas.coords(self.text, (self.x0+self.x1)/2,(self.y0+self.y1)/2,)
+        
+        if len(self.hasSlot) == 2:
+            r1, r2 = self.hasSlot
+            if r1.x0 > r2.x0:
+                r1,r2 = r2,r1
+            self.x1=r2.x0-1
+            self.y1=(r2.y0+r2.y1)/2
+            self.y0=(r1.y0+r1.y1)/2
+            self.x0=r1.x1+1
+            self.canvas.coords(self.rectangle, self.x0,self.y0,self.x1,self.y1)
+            self.canvas.coords(self.text, (self.x0+self.x1)/2,(self.y0+self.y1)/2,)
+        elif len(self.hasSlot) == 1:
+            r1, = self.hasSlot
+            self.x1=r1.x0-1
+            self.y1=(r1.y0+r1.y1)/2
+            self.canvas.coords(self.rectangle, self.x0,self.y0,self.x1,self.y1)
+            self.canvas.coords(self.text, (self.x0+self.x1)/2,(self.y0+self.y1)/2,)
         
     def __iadd__(self,rec_slot_block):
+        rec_slot_block.attached_blocks.add(self)
+        self.hasSlot.add(rec_slot_block)
+        rec_slot_block.isSlotOf = self
         self.genBlock+=rec_slot_block.genBlock
-        self.attached_blocks.add(rec_slot_block)
+        #self.attached_blocks.add(rec_slot_block)
         self.genBlock.update_candidates()
         return self
     def moveTo(self, px, py, offsetX=0, offsetY=0):
         pass
+    ##TODO
     def generate_rec_slotBlock(self,isLeft = False):
         w=12
         h=12
@@ -382,52 +465,54 @@ class RectangleLinkBlock(RectangleGenBlock):
         if isLeft:
             offsetX = -self.w-w-10
         x0=self.x1+5+offsetX
-        rec_slot_block = RectangleSlotBlock(self.canvas, self.gfg,color='orange',text='s',textColor = 'black',x0= x0,y0 = y0 ,w=w ,h=h )
-        self.rec_slot_blocks.append(rec_slot_block)
+        rec_slot_block = RectangleSlotBlock(self.canvas, self.gfg,x0= x0,y0 = y0 ,w=w ,h=h )
+
         self+=rec_slot_block
         return rec_slot_block
 
 #deprecated
-class LineLink:
-    def __init__(self, canvas, rect1, rect2, color='black'):
-        self.canvas = canvas
-        self.rect1 = rect1
-        self.rect2 = rect2
-        self.tag = f'LineLink{id(self)}'
-        self.line = canvas.create_line(
-            0, 0, 0, 0, fill=color, dash=True, tag=(self.tag,))
-        rect1.lineLinks[self] = len(rect1.lineLinks)
-        rect2.lineLinks[self] = len(rect2.lineLinks)
-        self.update()
-    def delete(self):
-        self.canvas.delete(self.tag)
-    def update(self):
-        rect1 = self.rect1
-        rect2 = self.rect2
+#class LineLink:
+#    def __init__(self, canvas, rect1, rect2, color='black'):
+#        self.canvas = canvas
+#        self.rect1 = rect1
+#        self.rect2 = rect2
+#        self.tag = f'LineLink{id(self)}'
+#        self.line = canvas.create_line(
+#            0, 0, 0, 0, fill=color, dash=True, tag=(self.tag,))
+#        rect1.lineLinks[self] = len(rect1.lineLinks)
+#        rect2.lineLinks[self] = len(rect2.lineLinks)
+#        self.update()
+#    def delete(self):
+#        self.canvas.delete(self.tag)
+#    def update(self):
+#        rect1 = self.rect1
+#        rect2 = self.rect2
 
-        if rect1.x1 < rect2.x1:
-            rect1, rect2 = rect2, rect1
+#        if rect1.x1 < rect2.x1:
+#            rect1, rect2 = rect2, rect1
 
-        rect1_n = len(rect1.lineLinks)
-        rect1_i = rect1.lineLinks[self]
+#        rect1_n = len(rect1.lineLinks)
+#        rect1_i = rect1.lineLinks[self]
 
-        rect2_n = len(rect2.lineLinks)
-        rect2_i = rect2.lineLinks[self]
+#        rect2_n = len(rect2.lineLinks)
+#        rect2_i = rect2.lineLinks[self]
 
-        x0 = rect2.x1
-        y0 = (rect2.y1-rect2.y0)*(rect2_i+1)/(rect2_n+1) + rect2.y0
-        x1 = rect1.x0
-        y1 = (rect1.y1-rect1.y0)*(rect1_i+1)/(rect1_n+1) + rect1.y0
-        self.canvas.coords(self.line, x0, y0, x1, y1)
+#        x0 = rect2.x1
+#        y0 = (rect2.y1-rect2.y0)*(rect2_i+1)/(rect2_n+1) + rect2.y0
+#        x1 = rect1.x0
+#        y1 = (rect1.y1-rect1.y0)*(rect1_i+1)/(rect1_n+1) + rect1.y0
+#        self.canvas.coords(self.line, x0, y0, x1, y1)
 
 
 class GFG:
     def __init__(self, master=None):
+        self.ConnectionMode = False
         self.rectangleBlocks = set()
         self.currentRectangle = None
         self.line_links = set()
         self.currentLineLink = None
         self.selection = []
+        self.selctionChangedTKvar = BooleanVar()
         self.master = master
         self.allTags = sorted(TagSys_onto.Tag.descendants(),key=lambda e:e.name)
 
@@ -453,15 +538,32 @@ class GFG:
         main_frame.add(tag_frame)
         main_frame.add(self.canvas)
 
-        def block_button_command(): return self.generate_block(
-            color='red', text='Block', textColor='black')
+        def block_button_command(): return self.generate_block(RectangleBlock)
         block_button = Button(tool_frame, text='Block', width=10,
                       height=1, bd='1', command=block_button_command)
         block_button.pack(fill='x')
+        
+        def portBlock_button_command(): return self.generate_block(RectanglePortBlock)
+        portBlock_button = Button(tool_frame, text='portBlock', width=10,
+                      height=1, bd='1', command=portBlock_button_command)
+        portBlock_button.pack(fill='x')
+
+        def slotBlock_button_command(): return self.generate_block(RectangleSlotBlock)
+        slotBlock_button = Button(tool_frame, text='slotBlock', width=10,
+                      height=1, bd='1', command=slotBlock_button_command)
+        slotBlock_button.pack(fill='x')
+
+        def linkBlock_button_command(): return self.generate_block(RectangleLinkBlock)
+        linkBlock_button = Button(tool_frame, text='linkBlock', width=10,
+                      height=1, bd='1', command=linkBlock_button_command)
+        linkBlock_button.pack(fill='x')
+
+
 
         connect_button = Button(tool_frame, text='Connect', width=10,
                       height=1, bd='1', command=self.generate_link)
         connect_button.pack(fill='x')
+        self.selctionChangedTKvar.trace_add('read',lambda *_: self.link_select_component())
 
 
         
@@ -476,7 +578,8 @@ class GFG:
         def clear_block():
             if RectangleBlock.cur_selected:
                 RectangleBlock.cur_selected.delete()
-            RectangleBlock.cur_selected = None
+                sync_reasoner_pellet(infer_property_values=True, debug=0)
+            #RectangleBlock.cur_selected = None
 
         clear_button = Button(tool_frame, text='Delete', width=10,
                       height=1, bd='1', command=clear_block)
@@ -492,8 +595,8 @@ class GFG:
     def show(self, text):
         print(text)
 
-    def generate_block(self, color, text, textColor,w=50,h=50):
-        r = RectangleBlock(self.canvas, self, color, text, textColor,w=w,h=h)
+    def generate_block(self,class_name):
+        r = class_name(self.canvas, self)
 
         self.rectangleBlocks.add(r)
 
@@ -515,10 +618,12 @@ class GFG:
 
         if not selected_rectangle.isIn:#(e.x,e.y):
             RectangleGenBlock.cur_selected = None
+            self.ConnectionMode = False
+            self.selection = []
             if not selected_rectangle.isLine:
                 self.canvas.itemconfig(selected_rectangle.rectangle, outline='black',width=1)
             else:
-                self.canvas.itemconfig(selected_rectangle.rectangle, fill='black',w=1)
+                self.canvas.itemconfig(selected_rectangle.rectangle, fill='black',w=3)
             self.clear_tag_frame()
 
     def clear_tag_frame(self):
@@ -526,10 +631,13 @@ class GFG:
             widget.destroy()
     def update_tag_frame(self):
         self.clear_tag_frame()
-        def chkCallBack(_tag):
+        def chkCallBack(_tag, _var):
             if not RectangleGenBlock.cur_selected: return 
             genBlock = RectangleGenBlock.cur_selected.genBlock
-            genBlock << _tag
+            if _var.get():
+                genBlock << _tag
+            else:
+                genBlock >> _tag
             genBlock.update_candidates()
 
 
@@ -537,7 +645,9 @@ class GFG:
         for tag in self.allTags:
             if not RectangleGenBlock.cur_selected: return 
             genBlock = RectangleGenBlock.cur_selected.genBlock
-            button = Checkbutton(self.tag_frame, text=tag.name, command= lambda _tag = tag: chkCallBack(_tag)) 
+            chkVar = BooleanVar()
+            chkVar.set(False)
+            button = Checkbutton(self.tag_frame, text=tag.name, var=chkVar, command= lambda _tag = tag, _var=chkVar: chkCallBack(_tag, _var)) 
             if tag in genBlock.hasTag: button.toggle()
             button.grid(sticky = W, column=0,row=i)
             i+=1
@@ -551,62 +661,167 @@ class GFG:
     def generate_link(self):
         for r in self.rectangleBlocks:
             r.popMenu = True
-        self.show('Link mode')
+        self.show('connection mode')
+        self.ConnectionMode = True
+        self.selection = []
         self.show('Please select 2 components')
-        self.link_select_component_bind_id = self.master.bind(
-            '<ButtonRelease-1>', lambda e: self.link_select_component(e))
+        
 
-    def link_select_component(self, e):
-        bind_id = self.link_select_component_bind_id
-        for r in list(self.rectangleBlocks):
-            if r.isIn:#(e.x, e.y):
-                self.selection.append(r)
-                break
-        else:
-            self.master.unbind('<ButtonRelease-1>', bind_id)
-            self.show('Link canceled')
-            for r in self.rectangleBlocks:
-                r.popMenu = False
-            return
+    def connect(self):
+        rec_block1, rec_block2 = self.selection
+        if rec_block1.x0 > rec_block2.x0:
+            rec_block1, rec_block2=rec_block2, rec_block1
+        if isinstance(rec_block1, RectangleBlock) and isinstance(rec_block2, RectanglePortBlock) or\
+           isinstance(rec_block2, RectangleBlock) and isinstance(rec_block1, RectanglePortBlock):
+            if isinstance(rec_block1, RectanglePortBlock):
+                rec_block1, rec_block2 = rec_block2, rec_block1
+            
+            if  rec_block2.genBlock.isPortOf:
+                p1 = rec_block2
+                p2 = rec_block1.generate_rec_portBlock(isLeft=True)
+                s1 = p1.generate_rec_slotBlock()
+                s2 = p2.generate_rec_slotBlock(isLeft=True)
+                l1 = s1.generate_rec_linkBlock(s2)
+            else:    
+                rec_block1+=rec_block2
+                rec_block2.genBlock.update_candidates()
+        elif isinstance(rec_block1, RectangleLinkBlock) and isinstance(rec_block2, RectangleSlotBlock) or \
+        isinstance(rec_block2, RectangleLinkBlock) and isinstance(rec_block1, RectangleSlotBlock):
+            if isinstance(rec_block1, RectangleLinkBlock):
+                rec_block1, rec_block2 = rec_block2, rec_block1
+            if len(rec_block2.hasSlot)>=2:raise
+            
+            
+            s1 = rec_block1
 
-        if len(self.selection) == 2:
-            rec_block1, rec_block2 = self.selection
-            if rec_block1.x0 > rec_block2.x0:
-                rec_block1, rec_block2=rec_block2, rec_block1
-            ## main section
+            rec_block2 += s1
+        elif isinstance(rec_block1, RectangleLinkBlock) and isinstance(rec_block2, RectanglePortBlock) or \
+        isinstance(rec_block2, RectangleLinkBlock) and isinstance(rec_block1, RectanglePortBlock):
+            if isinstance(rec_block1, RectangleLinkBlock):
+                rec_block1, rec_block2 = rec_block2, rec_block1
+            if len(rec_block2.hasSlot)>=2:raise
+            
+            p1 = rec_block1
+            s1 = p1.generate_rec_slotBlock()
+
+            rec_block2 += s1
+        elif isinstance(rec_block1, RectangleLinkBlock) and isinstance(rec_block2, RectangleBlock) or \
+        isinstance(rec_block2, RectangleLinkBlock) and isinstance(rec_block1, RectangleBlock):
+            if isinstance(rec_block1, RectangleLinkBlock):
+                rec_block1, rec_block2 = rec_block2, rec_block1
+            if len(rec_block2.hasSlot)>=2: raise
+            p1 = rec_block1.generate_rec_portBlock()
+            s1 = p1.generate_rec_slotBlock()
+
+            rec_block2 += s1
+
+
+        elif isinstance(rec_block1, RectangleSlotBlock) and isinstance(rec_block2, RectanglePortBlock) or \
+        isinstance(rec_block2, RectangleSlotBlock) and isinstance(rec_block1, RectanglePortBlock):
+            if isinstance(rec_block1, RectangleSlotBlock):
+                rec_block1, rec_block2 = rec_block2, rec_block1
+            s2 = rec_block2
+            p1 = rec_block1
+
+            if s2.isSlotOf :
+                if p1.connectFromSlot:
+                    raise
+                s1 = p1.generate_rec_slotBlock()
+                s1.generate_rec_linkBlock(s2)
+            elif s2.connectToPort:
+                if p1.connectFromSlot:
+                    raise
+                s1=p1.generate_rec_slotBlock()
+                s1.generate_rec_linkBlock(s2)
+            else:
+                if p1.connectFromSlot:
+                    s1 = p1.connectFromSlot
+                    s1.generate_rec_linkBlock(s2)
+                else:
+                    p1+=s2
+
+                        
+        elif isinstance(rec_block1, RectangleSlotBlock) and isinstance(rec_block2, RectangleBlock) or \
+        isinstance(rec_block2, RectangleSlotBlock) and isinstance(rec_block1, RectangleBlock):
+            if isinstance(rec_block1, RectangleSlotBlock):
+                rec_block1, rec_block2 = rec_block2, rec_block1
+            if rec_block2.connectToPort:
+                p1 = rec_block1.generate_rec_portBlock()
+                s1 = p1.generate_rec_slotBlock()
+                s2 = rec_block2
+                l1 = s1.generate_rec_linkBlock(s2)
+            else:
+                p1 = rec_block1.generate_rec_portBlock()
+                p1 += rec_block2
+
+        elif isinstance(rec_block1, RectangleSlotBlock) and isinstance(rec_block2, RectangleSlotBlock):
+            s1 = rec_block1
+            s2 = rec_block2
+            l1 = s1.generate_rec_linkBlock(s2)
+        elif isinstance(rec_block1, RectanglePortBlock) and isinstance(rec_block2, RectanglePortBlock):
+            p1 = rec_block1
+            p2 = rec_block2
+            s1 = p1.generate_rec_slotBlock()
+            s2 = p2.generate_rec_slotBlock(isLeft=True)
+            l1 = s1.generate_rec_linkBlock(s2)
+        elif isinstance(rec_block1, RectangleBlock) and isinstance(rec_block2, RectangleBlock):
+            
             p1 = rec_block1.generate_rec_portBlock()
             p2 = rec_block2.generate_rec_portBlock(isLeft=True)
             s1 = p1.generate_rec_slotBlock()
             s2 = p2.generate_rec_slotBlock(isLeft=True)
-            
-            
+            l1 = s1.generate_rec_linkBlock(s2)
+        else:
+            raise
 
-           
-            w=s2.x0-s1.x1-1
-            h=(s2.y0+s2.y1)/2 - (s1.y0+s1.y1)/2
-            y0=(s1.y0+s1.y1)/2
-            x0=s1.x1+1
-            l1 = RectangleLinkBlock(self.canvas, self,color='black',text='link',textColor = 'blue',x0= x0,y0 = y0 ,w=w ,h=h )
-            l1.rec_slot_blocks.append(s1)
-            l1.rec_slot_blocks.append(s2)
-            s1.attached_blocks.add(l1)
-            s2.attached_blocks.add(l1)
-            l1.rect1 = s1
-            l1.rect2 = s2
-            l1+=s1
-            l1+=s2
-            l1.genBlock.update_candidates()
-            
-            #self.currentLineLink = LineLink(self.canvas, r1, r2)
-            ##
-            self.master.unbind('<ButtonRelease-1>', bind_id)
+    def link_select_component(self):
+        #bind_id = self.link_select_component_bind_id
+        
+        
+        #for r in list(self.rectangleBlocks):
+        #    if r.isIn:#(e.x, e.y):
+        #        self.selection.append(r)
+        #        break
+        #else:
+        if not self.ConnectionMode or len(self.selection)>2:
             self.selection = []
-            self.show('2 selected')
-            self.show('Link successfully created')
+            #self.master.unbind('<ButtonRelease-1>', bind_id)
+            self.show('Connection canceled')
             for r in self.rectangleBlocks:
                 r.popMenu = False
             return
-        self.show('1 selected')
+        if self.selection:
+            self.show(f'{self.selection[-1].genBlock.name} selected')
+        
+        if len(self.selection) == 2:
+            
+            self.show('2 selected')
+            self.show('Connecting...')
+
+            ## main section
+            try :
+                self.connect()
+            except:
+
+                print('connection failed!!')
+
+            else:
+                print('~connection succeeded~')
+            
+            self.ConnectionMode = False
+            #self.currentLineLink = LineLink(self.canvas, r1, r2)
+            ##
+            #self.master.unbind('<ButtonRelease-1>', bind_id)
+            self.selection = []
+            
+
+            for r in self.rectangleBlocks:
+                r.popMenu = False
+            return
+        else:
+            self.show('1 selected')
+
+
 
 
 if __name__ == "__main__":
